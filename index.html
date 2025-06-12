@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎮 Gamer Hub 9000</title>
+  <link rel="icon" type="image/gif" href="https://cdn-icons-gif.flaticon.com/9889/9889680.gif?v=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Orbitron:wght@700&display=swap" rel="stylesheet" />
+  <!-- Google Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    /* Root CSS Variables for default theme */
+    :root {
+      --primary-color: #8A2BE2; /* Amethyst */
+      --accent-color: #00CED1; /* Dark Cyan */
+      --text-color: #E0E0E0;
+      --background-dark: #0A0A0A;
+      --card-bg: #1A1A1A;
+      --shadow-color-primary: rgba(138, 43, 226, 0.6);
+      --shadow-color-accent: rgba(0, 206, 209, 0.6);
+    }
+
+    /* Alt Theme Variables */
+    body.alt-theme {
+      --primary-color: #FF69B4; /* Hot Pink */
+      --accent-color: #FFFF00; /* Yellow */
+      --text-color: #F8F8F8;
+      --background-dark: #121212;
+      --card-bg: #222222;
+      --shadow-color-primary: rgba(255, 105, 180, 0.6);
+      --shadow-color-accent: rgba(255, 255, 0, 0.6);
+    }
+
+    /* Forest Green Theme */
+    body.forest-theme {
+      --primary-color: #4CAF50; /* Green */
+      --accent-color: #8BC34A; /* Light Green */
+      --text-color: #E8F5E9;
+      --background-dark: #212121;
+      --card-bg: #384538;
+      --shadow-color-primary: rgba(76, 175, 80, 0.6);
+      --shadow-color-accent: rgba(139, 195, 74, 0.6);
+    }
+
+    /* Ocean Blue Theme */
+    body.ocean-theme {
+      --primary-color: #2196F3; /* Blue */
+      --accent-color: #00BCD4; /* Cyan */
+      --text-color: #E3F2FD;
+      --background-dark: #1A237E; /* Dark Indigo */
+      --card-bg: #283593; /* Indigo */
+      --shadow-color-primary: rgba(33, 150, 243, 0.6);
+      --shadow-color-accent: rgba(0, 188, 212, 0.6);
+    }
+
+    /* Base Styles - apply to all themes */
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      background: var(--background-dark);
+      color: var(--text-color);
+      transition: background 0.5s ease, color 0.5s ease;
+    }
+
+    /* Grid Background Effect (static, hidden when visualizer is active) */
+    body::before {
+      content: "";
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: 0;
+      pointer-events: none;
+      animation: floatGrid 60s linear infinite;
+      transition: opacity 0.5s ease;
+    }
+
+    @keyframes floatGrid {
+      from { background-position: 0 0; }
+      to { background-position: 1000px 1000px; }
+    }
+
+    /* Main Hub Layout - Fade In Animation */
+    .hub {
+      position: relative;
+      z-index: 2;
+      max-width: 1100px;
+      margin: auto;
+      padding: 60px 20px;
+      text-align: center;
+      opacity: 0; /* Initially hidden for fade-in */
+      animation: fadeInContent 1s forwards ease-out;
+      animation-delay: 0.5s; /* Delay after page loads */
+    }
+
+    @keyframes fadeInContent {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Logo Styling - Pulse Animation */
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.5rem;
+      color: var(--primary-color);
+      margin-bottom: 50px;
+      text-shadow: 0 0 15px var(--primary-color), 0 0 30px var(--accent-color);
+      transition: color 0.5s, text-shadow 0.5s;
+      letter-spacing: 2px;
+      line-height: 1;
+      animation: logoPulse 2s infinite alternate ease-in-out; /* Continuous pulse */
+    }
+
+    @keyframes logoPulse {
+      from { text-shadow: 0 0 15px var(--primary-color), 0 0 30px var(--accent-color); transform: scale(1); }
+      to { text-shadow: 0 0 25px var(--primary-color), 0 0 50px var(--accent-color); transform: scale(1.01); }
+    }
+
+    /* Games Grid */
+    .games {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      justify-content: center;
+    }
+
+    /* Individual Game Card - Staggered Pop-in Animation */
+    .game {
+      background: var(--card-bg);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.5s;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      opacity: 0; /* Initially hidden for pop-in */
+      animation: gamePopIn 0.6s forwards ease-out;
+    }
+
+    .game:nth-child(1) { animation-delay: 0.8s; }
+    .game:nth-child(2) { animation-delay: 1s; }
+    .game:nth-child(3) { animation-delay: 1.2s; }
+    /* Add more nth-child rules if you have more games */
+
+    @keyframes gamePopIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .game:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 25px var(--shadow-color-accent), 0 0 50px var(--shadow-color-primary);
+    }
+
+    .game img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      user-select: none;
+      -webkit-user-drag: none;
+      draggable: false;
+      transition: transform 0.3s ease;
+    }
+
+    .game:hover img {
+      transform: scale(1.05);
+    }
+
+    .game a {
+      display: block;
+      padding: 20px;
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1.2em;
+      font-weight: 600;
+      transition: color 0.3s;
+      user-select: none;
+    }
+
+    .game a:hover {
+      color: var(--primary-color);
+    }
+
+    /* Control Buttons */
+    .control-btn {
+      position: fixed;
+      bottom: 30px;
+      background: var(--card-bg);
+      border: 2px solid var(--primary-color);
+      padding: 12px 25px;
+      border-radius: 50px;
+      font-size: 1em;
+      cursor: pointer;
+      z-index: 3;
+      user-select: none;
+      transition: background-color 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-color);
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      display: flex; /* For icon and text alignment */
+      align-items: center;
+      gap: 8px; /* Space between icon and text */
+    }
+
+    .control-btn .material-icons {
+      font-size: 1.2em; /* Adjust icon size relative to button text */
+    }
+
+    .control-btn:hover {
+      background: var(--primary-color);
+      color: #FFF;
+      box-shadow: 0 0 20px var(--shadow-color-primary);
+      transform: translateY(-3px);
+    }
+
+    .sound-toggle {
+      right: 30px;
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+    }
+    .sound-toggle:hover {
+      background: var(--accent-color);
+      color: #FFF;
+      box-shadow: 0 0 20px var(--shadow-color-accent);
+    }
+
+    .theme-toggle {
+      left: 30px;
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    .settings-toggle {
+      left: 50%;
+      transform: translateX(-50%); /* Base transform for centering */
+      border-color: #aaa;
+      color: #eee;
+    }
+    .settings-toggle:hover {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+        transform: translateX(-50%) translateY(-3px); /* Combine transforms correctly */
+    }
+
+
+    /* Particles Background (Original GIF - hidden when a visualizer is active) */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: url('https://cdn.jsdelivr.net/gh/JulianLaval/canvas-particle-network/particles.gif') center/cover no-repeat;
+      z-index: 1;
+      opacity: 0.15;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Settings Overlay - Now animated */
+    #settingsOverlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.95);
+      color: var(--text-color);
+      z-index: 9999;
+      display: none; /* Controlled by JS for animation */
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      font-size: 1.1em;
+      backdrop-filter: blur(5px);
+
+      /* Animation properties */
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+    }
+    #settingsOverlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    #settingsOverlay h2 {
+      margin-bottom: 1.5rem;
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      text-shadow: 0 0 10px var(--primary-color);
+    }
+    #settingsOverlay .settings-content {
+        background: var(--card-bg);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        width: 90%;
+        max-width: 500px;
+        border: 1px solid var(--accent-color);
+    }
+
+    #settingsOverlay label {
+      margin: 0.5rem 0 0.2rem;
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      color: var(--text-color);
+      justify-content: space-between;
+      width: 100%;
+    }
+    #settingsOverlay input[type=color] {
+      width: 100px;
+      height: 35px;
+      border: 2px solid var(--accent-color);
+      cursor: pointer;
+      border-radius: 8px;
+      background: transparent;
+      padding: 2px;
+    }
+    #settingsOverlay input[type=checkbox] {
+      transform: scale(1.4);
+      margin-right: 0;
+      margin-left: 15px;
+      cursor: pointer;
+      accent-color: var(--accent-color);
+    }
+    #settingsOverlay .close-btn {
+      margin-top: 2rem;
+      background: var(--accent-color);
+      border: none;
+      padding: 12px 35px;
+      border-radius: 50px;
+      color: var(--background-dark);
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s, box-shadow 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 5px 15px var(--shadow-color-accent);
+    }
+    #settingsOverlay .close-btn:hover {
+      background: var(--primary-color);
+      color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 20px var(--shadow-color-primary);
+    }
+    .color-picker-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+
+    /* Canvas Visualizers */
+    #synthwaveCanvas, #particleCanvas, #bassCanvas {
+      position: fixed;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.7s ease; /* Consistent transition for all visualizers */
+    }
+
+    #synthwaveCanvas.active, #particleCanvas.active, #bassCanvas.active {
+      opacity: 1;
+    }
+
+    #synthwaveCanvas {
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    #particleCanvas {
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    #bassCanvas {
+      bottom: 0; left: 0;
+      width: 100%;
+      height: 150px;
+      z-index: 1;
+    }
+
+    /* New class to hide static background elements when any visualizer is active */
+    body.visualizer-active::before {
+      opacity: 0 !important;
+    }
+    body.visualizer-active .particles {
+      opacity: 0 !important;
+    }
+
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .logo {
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+      }
+      .games {
+        grid-template-columns: 1fr;
+      }
+      .hub {
+        padding: 40px 15px;
+      }
+      .control-btn {
+        bottom: 15px;
+        padding: 10px 18px;
+        font-size: 0.9em;
+      }
+      .sound-toggle { right: 15px; }
+      .theme-toggle { left: 15px; }
+      .settings-toggle {
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto;
+      }
+      #settingsOverlay .settings-content {
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Background Elements -->
+<div class="particles"></div>
+<canvas id="synthwaveCanvas"></canvas>
+<canvas id="particleCanvas"></canvas>
+<canvas id="bassCanvas"></canvas>
+
+<!-- Main Hub -->
+<div class="hub">
+  <div class="logo">🎮 Gamer Hub 9000</div>
+
+  <div class="games">
+    <div class="game">
+      <img draggable="false" src="https://static.digdig.io/b54b08b7b6eefe40b7cd3ef9193283ee69909cd3/apple-touch-icon.png" alt="DigDig" />
+      <a href="https://darrensheng1325.github.io/digdig" target="_blank" onclick="playSound()">DigDig.io Clone</a>
+    </div>
+    <div class="game">
+      <img draggable="false" src="https://ih1.redbubble.net/image.3801728112.9787/st,small,507x507-pad,600x600,f8f8f8.jpg" alt="Axolotl Game" />
+      <a href="https://darrensheng1325.github.io/axolotl.html" target="_blank" onclick="playSound()">Axolotl Game</a>
+    </div>
+    <div class="game">
+      <img draggable="false" src="https://florr.io/apple-touch-icon.png" alt="3D Florr" />
+      <a href="http://18.144.119.82:3000" target="_blank" onclick="playSound()">3D Florr.io (Web)</a>
+    </div>
+  </div>
+</div>
+
+<!-- Audio Elements -->
+<audio id="clickSound" src="https://dl.sndup.net/czg9s/mixkit-software-interface-back-2575.wav"></audio>
+<audio id="bgMusic" loop crossorigin="anonymous">
+  <source src="https://cdn.pixabay.com/audio/2024/06/22/audio_f4e83aea1c.mp3" type="audio/mp3" />
+</audio>
+
+<!-- Controls -->
+<button class="control-btn sound-toggle" id="toggleButton" onclick="toggleMusic()">
+    <span class="material-icons">volume_off</span> Music Off
+</button>
+<button class="control-btn theme-toggle" onclick="toggleTheme()">🎨 Toggle Theme</button>
+<button class="control-btn settings-toggle" onclick="openSettings()">
+    <span class="material-icons">settings</span> Settings
+</button>
+
+<!-- Settings Overlay -->
+<div id="settingsOverlay" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+  <div class="settings-content">
+    <h2 id="settingsTitle">Settings</h2>
+
+    <div class="color-picker-group">
+      <label for="primaryColor">Primary Color</label>
+      <input type="color" id="primaryColor" value="#8A2BE2" />
+    </div>
+
+    <div class="color-picker-group">
+      <label for="accentColor">Accent Color</label>
+      <input type="color" id="accentColor" value="#00CED1" />
+    </div>
+
+    <label>
+        Enable Synthwave Mode
+        <input type="checkbox" id="synthwaveToggle" checked />
+    </label>
+
+    <label>
+        Enable Particle Mode
+        <input type="checkbox" id="particleToggle" checked />
+    </label>
+
+    <label>
+        Enable Bass Blocks
+        <input type="checkbox" id="bassToggle" checked />
+    </label>
+
+    <button class="close-btn" onclick="closeSettings()">Close</button>
+  </div>
+</div>
+
+<script>
+  const clickSound = document.getElementById('clickSound');
+  const bgMusic = document.getElementById('bgMusic');
+  const toggleBtn = document.getElementById('toggleButton');
+  const synthwaveCanvas = document.getElementById('synthwaveCanvas');
+  const particleCanvas = document.getElementById('particleCanvas');
+  const bassCanvas = document.getElementById('bassCanvas');
+  const settingsOverlay = document.getElementById('settingsOverlay');
+  const primaryColorPicker = document.getElementById('primaryColor');
+  const accentColorPicker = document.getElementById('accentColor');
+  const synthwaveToggle = document.getElementById('synthwaveToggle');
+  const particleToggle = document.getElementById('particleToggle');
+  const bassToggle = document.getElementById('bassToggle');
+  const body = document.body;
+  const root = document.documentElement;
+
+  let musicPlaying = false;
+  let audioCtx;
+  let analyser;
+  let frequencyData;
+  let waveformData;
+  let source;
+  let wavePhase = 0;
+  let synthwaveAnimationFrameId = null;
+  let particleAnimationFrameId = null;
+  let bassAnimationFrameId = null;
+  let ctx = null; // Context for synthwaveCanvas
+  let particleCtx = null; // Context for particleCanvas
+  let bassCtx = null; // Context for bassCanvas
+
+  const staticThemeNames = ['default-theme', 'alt-theme', 'forest-theme', 'ocean-theme'];
+  let currentThemeIndex = 0;
+
+  // Particle properties
+  let particles = [];
+  const PARTICLE_COUNT_BASE = 50;
+  const MAX_PARTICLES_BOOST = 150;
+  const PARTICLE_SIZE_BASE = 2;
+  const PARTICLE_SIZE_BOOST = 5;
+  const PARTICLE_SPEED_BASE = 0.5;
+  const PARTICLE_SPEED_BOOST = 2;
+  const PARTICLE_MAX_DECAY = 0.02;
+  const PARTICLE_MIN_DECAY = 0.002;
+
+  // --- Utility Functions ---
+
+  function hslToRgb(h, s, l) {
+    let c = (1 - Math.abs(2 * l - 1)) * s,
+        x = c * (1 - Math.abs((h / 60) % 2 - 1)),
+        m = l - c / 2,
+        r = 0,
+        g = 0,
+        b = 0;
+
+    if (0 <= h && h < 60) {
+        r = c; g = x; b = 0;
+    } else if (60 <= h && h < 120) {
+        r = x; g = c; b = 0;
+    } else if (120 <= h && h < 180) {
+        r = 0; g = c; b = x;
+    } else if (180 <= h && h < 240) {
+        r = 0; g = x; b = c;
+    } else if (240 <= h && h < 300) {
+        r = x; g = 0; b = c;
+    } else if (300 <= h && h < 360) {
+        r = c; g = 0; b = x;
+    }
+    r = Math.round((r + m) * 255);
+    g = Math.round((g + m) * 255);
+    b = Math.round((b + m) * 255);
+
+    return `rgb(${r},${g},${b})`;
+  }
+
+  // --- Audio Control Functions ---
+
+  function playSound() {
+    clickSound.currentTime = 0;
+    clickSound.play().catch(e => console.warn("Click sound play failed:", e));
+  }
+
+  async function toggleMusic() {
+    try {
+      if (musicPlaying) {
+        bgMusic.pause();
+        toggleBtn.innerHTML = '<span class="material-icons">volume_off</span> Music Off';
+        if (audioCtx && audioCtx.state === 'running') {
+            audioCtx.suspend();
+        }
+      } else {
+        await bgMusic.play();
+        toggleBtn.innerHTML = '<span class="material-icons">volume_up</span> Music On';
+        if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        // When music starts, call updateVisualizerState to make them dynamic if toggled on
+        updateVisualizerState();
+      }
+      musicPlaying = !musicPlaying;
+    } catch (error) {
+      console.error("Music play/pause error:", error);
+      if (error.name === "NotAllowedError") {
+        alert("Autoplay was prevented by the browser. Please interact with the page (e.g., click) to enable music.");
+      }
+    }
+  }
+
+  let hasInteracted = false;
+  document.addEventListener("click", () => {
+    if (!hasInteracted) {
+      hasInteracted = true;
+      toggleMusic();
+    }
+  }, { once: true });
+
+  // --- Theme & Settings Functions ---
+
+  function applyStaticTheme(themeClass) {
+    staticThemeNames.forEach(name => body.classList.remove(name));
+    if (themeClass !== 'default-theme') {
+      body.classList.add(themeClass);
+    }
+  }
+
+  function toggleTheme() {
+    // Deactivate all visualizers when cycling through static themes
+    synthwaveToggle.checked = false;
+    particleToggle.checked = false;
+    bassToggle.checked = false;
+    updateVisualizerState(); // Update canvases based on new toggle states
+
+    // Cycle to the next static theme
+    currentThemeIndex = (currentThemeIndex + 1) % staticThemeNames.length;
+    applyStaticTheme(staticThemeNames[currentThemeIndex]);
+    updateColors();
+  }
+
+  function openSettings() {
+    settingsOverlay.style.display = 'flex';
+    requestAnimationFrame(() => {
+      settingsOverlay.classList.add('active');
+    });
+    // Synchronize checkbox states with current active visualizers
+    synthwaveToggle.checked = synthwaveCanvas.classList.contains('active');
+    particleToggle.checked = particleCanvas.classList.contains('active');
+    bassToggle.checked = bassCanvas.classList.contains('active');
+  }
+
+  function closeSettings() {
+    settingsOverlay.classList.remove('active');
+    settingsOverlay.addEventListener('transitionend', function handler(e) {
+      // Ensure the transition is for opacity and not a child element's transition
+      if (e.propertyName === 'opacity' && !settingsOverlay.classList.contains('active')) {
+        settingsOverlay.style.display = 'none';
+        settingsOverlay.removeEventListener('transitionend', handler);
+      }
+    });
+  }
+
+  function updateColors() {
+    root.style.setProperty('--primary-color', primaryColorPicker.value);
+    root.style.setProperty('--accent-color', accentColorPicker.value);
+  }
+  primaryColorPicker.addEventListener('input', updateColors);
+  accentColorPicker.addEventListener('input', updateColors);
+  updateColors();
+
+  // --- Web Audio API Initialization (shared) ---
+
+  function initAudioContext() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      source = audioCtx.createMediaElementSource(bgMusic);
+      analyser = audioCtx.createAnalyser();
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+      analyser.fftSize = 256;
+      frequencyData = new Uint8Array(analyser.frequencyBinCount);
+      waveformData = new Uint8Array(analyser.fftSize);
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(e => console.error("AudioContext resume failed:", e));
+    }
+  }
+
+  // --- Visualizer Toggle Logic (handles all independently) ---
+
+  function updateVisualizerState() {
+      const anyVisualizerRequested = synthwaveToggle.checked || particleToggle.checked || bassToggle.checked;
+
+      if (anyVisualizerRequested) {
+          body.classList.add('visualizer-active');
+          staticThemeNames.forEach(name => body.classList.remove(name));
+          currentThemeIndex = -1;
+      } else {
+          body.classList.remove('visualizer-active');
+          if (currentThemeIndex === -1) {
+              currentThemeIndex = 0;
+              applyStaticTheme(staticThemeNames[currentThemeIndex]);
+          } else {
+              applyStaticTheme(staticThemeNames[currentThemeIndex]);
+          }
+      }
+
+      // Helper to manage visualizer state (active class, animation loop, clear)
+      function manageVisualizer(toggle, canvas, setupFunc, drawFunc, animFrameIdRef, ctxGetter) {
+        // Get the current context for the canvas. It might be null if setup hasn't run.
+        let visualizerCtx = ctxGetter();
+
+        if (toggle.checked) {
+            canvas.classList.add('active'); // Triggers CSS opacity transition
+            setupFunc(); // Sets up canvas and initializes its context
+            // Re-get context after setupFunc, as it might have just been initialized
+            visualizerCtx = ctxGetter();
+            drawFunc(); // Start drawing immediately (will be static if music not playing)
+        } else {
+            canvas.classList.remove('active'); // Triggers CSS opacity transition
+            const currentAnimId = window[animFrameIdRef]; // Capture current ID for specific visualizer
+
+            // Immediately cancel the animation frame and clear the canvas for quick response
+            if (currentAnimId !== null) {
+                cancelAnimationFrame(currentAnimId);
+                window[animFrameIdRef] = null; // Clear the ID
+            }
+            // Clear context if it's available
+            if (visualizerCtx) visualizerCtx.clearRect(0, 0, canvas.width, canvas.height);
+            if (canvas.id === 'particleCanvas') particles = []; // Reset particles array
+
+            // Add transitionend listener for final cleanup after CSS fade-out
+            const onTransitionEnd = (e) => {
+                // Ensure it's the canvas's opacity transition and the canvas is now inactive
+                if (e.propertyName === 'opacity' && !canvas.classList.contains('active')) {
+                    // Double check animation frame is cancelled, though it should be already
+                    if (window[animFrameIdRef] !== null) {
+                        cancelAnimationFrame(window[animFrameIdRef]);
+                        window[animFrameIdRef] = null;
+                    }
+                    canvas.removeEventListener('transitionend', onTransitionEnd);
+                }
+            };
+            canvas.addEventListener('transitionend', onTransitionEnd);
+        }
+      }
+
+      // Pass functions that return the global context variables
+      manageVisualizer(synthwaveToggle, synthwaveCanvas, setupSynthwave, drawSynthwave, 'synthwaveAnimationFrameId', () => ctx);
+      manageVisualizer(particleToggle, particleCanvas, setupParticles, drawParticles, 'particleAnimationFrameId', () => particleCtx);
+      manageVisualizer(bassToggle, bassCanvas, setupBass, drawBass, 'bassAnimationFrameId', () => bassCtx);
+  }
+
+  synthwaveToggle.addEventListener('change', updateVisualizerState);
+  particleToggle.addEventListener('change', updateVisualizerState);
+  bassToggle.addEventListener('change', updateVisualizerState);
+
+
+  // --- Synthwave Visualization Functions ---
+
+  function setupSynthwave() {
+    initAudioContext();
+    if (!ctx) ctx = synthwaveCanvas.getContext('2d');
+    synthwaveCanvas.width = window.innerWidth;
+    synthwaveCanvas.height = window.innerHeight;
+  }
+
+  function drawSynthwave() {
+    if (!synthwaveCanvas.classList.contains('active') || !ctx) {
+      if (synthwaveAnimationFrameId !== null) {
+          cancelAnimationFrame(synthwaveAnimationFrameId);
+          synthwaveAnimationFrameId = null;
+      }
+      return;
+    }
+
+    ctx.clearRect(0, 0, synthwaveCanvas.width, synthwaveCanvas.height);
+
+    if (analyser && frequencyData) {
+      analyser.getByteFrequencyData(frequencyData);
+      const avgFreq = frequencyData.reduce((a, b) => a + b, 0) / frequencyData.length;
+      wavePhase += 0.03;
+
+      const baseY = synthwaveCanvas.height / 2;
+      // Amplitude reacts to avgFreq, regardless of musicPlaying state (will be flat if music is paused)
+      const amplitude = avgFreq * 3;
+      const wavelength = 0.02;
+
+      ctx.lineWidth = 3;
+      const grad = ctx.createLinearGradient(0, 0, synthwaveCanvas.width, 0);
+      grad.addColorStop(0, primaryColorPicker.value);
+      grad.addColorStop(0.5, accentColorPicker.value);
+      grad.addColorStop(1, primaryColorPicker.value);
+      ctx.strokeStyle = grad;
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = accentColorPicker.value;
+
+      ctx.beginPath();
+      ctx.moveTo(0, baseY + amplitude * Math.sin(wavePhase));
+      for (let x = 0; x < synthwaveCanvas.width; x++) {
+        const y = baseY + amplitude * Math.sin(wavePhase + x * wavelength);
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      ctx.shadowBlur = 0;
+    }
+    synthwaveAnimationFrameId = requestAnimationFrame(drawSynthwave);
+  }
+
+  // --- Particle Visualization Functions ---
+
+  function setupParticles() {
+    initAudioContext();
+    if (!particleCtx) particleCtx = particleCanvas.getContext('2d');
+    particleCanvas.width = window.innerWidth;
+    particleCanvas.height = window.innerHeight;
+    particles = [];
+  }
+
+  function drawParticles() {
+    if (!particleCanvas.classList.contains('active') || !particleCtx) {
+      if (particleAnimationFrameId !== null) {
+          cancelAnimationFrame(particleAnimationFrameId);
+          particleAnimationFrameId = null;
+      }
+      return;
+    }
+
+    particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+
+    if (analyser && frequencyData && waveformData) {
+      analyser.getByteFrequencyData(frequencyData);
+      analyser.getByteTimeDomainData(waveformData);
+
+      const avgFreq = frequencyData.reduce((a, b) => a + b, 0) / frequencyData.length;
+      const beatIntensity = avgFreq / 255;
+
+      let sumSquares = 0;
+      for (const amp of waveformData) {
+        const normAmp = (amp - 128) / 128;
+        sumSquares += normAmp * normAmp;
+      }
+      let rms = Math.sqrt(sumSquares / waveformData.length);
+      const normalizedVolume = rms;
+
+      const currentParticleCount = PARTICLE_COUNT_BASE + (MAX_PARTICLES_BOOST * beatIntensity);
+      // Create particles even if music is off, but they won't move/flicker much
+      while (particles.length < currentParticleCount) {
+        particles.push(new Particle(particleCanvas.width, particleCanvas.height, avgFreq, normalizedVolume));
+      }
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.update(beatIntensity, normalizedVolume);
+        p.draw(particleCtx);
+
+        if (p.y > particleCanvas.height + p.currentSize || p.opacity <= 0) {
+          particles.splice(i, 1);
+        }
+      }
+    }
+    particleAnimationFrameId = requestAnimationFrame(drawParticles);
+  }
+
+  // Particle Class
+  class Particle {
+    constructor(canvasWidth, canvasHeight, initialAvgFreq, initialNormalizedVolume) {
+      this.x = Math.random() * canvasWidth;
+      this.initialSize = PARTICLE_SIZE_BASE + Math.random() * PARTICLE_SIZE_BOOST;
+      this.currentSize = this.initialSize;
+      this.y = -this.initialSize - Math.random() * 100;
+      this.speedY = PARTICLE_SPEED_BASE + Math.random() * PARTICLE_SPEED_BOOST;
+
+      const hue = 200 + (initialAvgFreq / 255) * 100;
+      this.color = hslToRgb(hue, 0.8, 0.6);
+      this.opacity = 1;
+      this.baseDecay = Math.random() * (PARTICLE_MAX_DECAY - PARTICLE_MIN_DECAY) + PARTICLE_MIN_DECAY;
+    }
+
+    update(beatIntensity, normalizedVolume) {
+      this.currentSpeed = PARTICLE_SPEED_BASE + (PARTICLE_SPEED_BOOST * beatIntensity) * Math.random();
+      this.currentSize = this.initialSize + (PARTICLE_SIZE_BOOST * beatIntensity);
+
+      this.y += this.speedY * this.currentSpeed;
+
+      this.opacity -= this.baseDecay * (1 + (1 - normalizedVolume) * 5);
+    }
+
+    draw(ctx) {
+      ctx.globalAlpha = Math.max(0, this.opacity);
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.currentSize, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = this.color;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  // --- Bass Visualization Functions ---
+  function setupBass() {
+    initAudioContext();
+    if (!bassCtx) bassCtx = bassCanvas.getContext('2d');
+    bassCanvas.width = window.innerWidth;
+    bassCanvas.height = 150;
+  }
+
+  function drawBass() {
+    if (!bassCanvas.classList.contains('active') || !bassCtx) {
+        if (bassAnimationFrameId !== null) {
+            cancelAnimationFrame(bassAnimationFrameId);
+            bassAnimationFrameId = null;
+        }
+        return;
+    }
+
+    bassCtx.clearRect(0, 0, bassCanvas.width, bassCanvas.height);
+
+    if (analyser && frequencyData) {
+        analyser.getByteFrequencyData(frequencyData);
+
+        const bassRange = 10;
+        const bassData = frequencyData.slice(0, bassRange);
+        const barWidth = bassCanvas.width / bassData.length;
+
+        for (let i = 0; i < bassData.length; i++) {
+            // Bar height reacts to bassData, even if music is off (will be flat)
+            const barHeight = bassData[i] * 0.8;
+            const x = i * barWidth;
+            const y = bassCanvas.height - barHeight;
+
+            const gradient = bassCtx.createLinearGradient(x, bassCanvas.height, x, y);
+            gradient.addColorStop(0, primaryColorPicker.value);
+            gradient.addColorStop(1, accentColorPicker.value);
+
+            bassCtx.fillStyle = gradient;
+            bassCtx.shadowBlur = 5;
+            bassCtx.shadowColor = primaryColorPicker.value;
+            bassCtx.fillRect(x, y, barWidth - 1, barHeight);
+            bassCtx.shadowBlur = 0;
+        }
+    }
+    bassAnimationFrameId = requestAnimationFrame(drawBass);
+  }
+
+
+  // Handle window resizing to ensure canvases redraw correctly
+  window.addEventListener('resize', () => {
+    if (synthwaveCanvas.classList.contains('active')) {
+      setupSynthwave();
+    }
+    if (particleCanvas.classList.contains('active')) {
+      setupParticles();
+    }
+    if (bassCanvas.classList.contains('active')) {
+      setupBass();
+    }
+  });
+
+  // Initial setup: Call updateVisualizerState to activate default visualizers
+  // This will ensure canvases are set up and start their drawing loops immediately.
+  updateVisualizerState();
+</script>
+</body>
+</html>
